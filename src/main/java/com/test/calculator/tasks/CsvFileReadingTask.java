@@ -9,50 +9,64 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 @Slf4j
 @Component
-public class CsvFileReadingTask implements Runnable {
+public class CsvFileReadingTask {
 
-    private static final String FILE_NAME = "classpath:csv/Stocks.csv";
+    @NotNull
+    private File stocksFile;
 
-    private static final int PILL_NUMBER = 50;
-
+    private static final int PILL_NUMBER = 150;
     private static final Record POISON_PILL = Record.builder().build();
 
     private final RecordQueue recordsQueue;
 
     private final RecordTransformer recordTransformer;
 
-    public CsvFileReadingTask(RecordQueue recordsQueue, RecordTransformer recordTransformer) {
+    public CsvFileReadingTask(RecordQueue recordsQueue,
+                              RecordTransformer recordTransformer) {
         this.recordsQueue = recordsQueue;
         this.recordTransformer = recordTransformer;
     }
 
-    @Override
-    public void run() {
+    public void readRecords(String fileName) {
+
         try {
-            File stocksFile = ResourceUtils.getFile(FILE_NAME);
+            CSVParser csvParser = getCsvRecordsFromFile(fileName);
+            parseRecords(csvParser);
 
-            CSVParser csvParser = CSVParser.parse(stocksFile, Charset.defaultCharset(), CSVFormat.RFC4180
-                    .withDelimiter(';'));
-
-            for (CSVRecord csvRecord : csvParser) {
-                Record record = recordTransformer.transform(csvRecord);
-                recordsQueue.put(record);
-                System.out.println("Record put: " + csvRecord.getRecordNumber());
-            }
-
-            for (int j = 0; j < PILL_NUMBER; j++) {
-                recordsQueue.put(POISON_PILL);
-            }
-
-        } catch (InterruptedException | IOException e) {
-            log.error("Error while reading the file. Message: " + e.getMessage());
+        } catch (InterruptedException | IOException ex) {
+            log.error("Error while reading the file. Message: " + ex.getMessage());
             Thread.currentThread().interrupt();
+        }
+    }
+
+    private CSVParser getCsvRecordsFromFile(String fileName) throws IOException {
+        stocksFile = ResourceUtils.getFile(fileName);
+
+        return CSVParser.parse(stocksFile, Charset.defaultCharset(), CSVFormat.RFC4180
+                .withDelimiter(';'));
+    }
+
+    private void parseRecords(CSVParser csvParser) throws InterruptedException {
+
+        for (CSVRecord csvRecord : csvParser) {
+            Record record = recordTransformer.transform(csvRecord);
+            recordsQueue.put(record);
+            System.out.println("Record put: " + csvRecord.getRecordNumber());
+        }
+
+        putPoisonPills();
+    }
+
+    private void putPoisonPills() throws InterruptedException {
+        for (int j = 0; j < PILL_NUMBER; j++) {
+            recordsQueue.put(POISON_PILL);
         }
     }
 

@@ -15,14 +15,16 @@ public class RecordProcessorService {
     private final ExecutorService processorService = Executors.newFixedThreadPool(THREAD_COUNT);
 
     private final RecordQueue recordQueue;
+    private final RecordProcessingTask processingTask;
 
-    public RecordProcessorService(RecordQueue recordQueue) {
+    public RecordProcessorService(RecordQueue recordQueue, RecordProcessingTask processingTask) {
         this.recordQueue = recordQueue;
+        this.processingTask = processingTask;
     }
 
     public void processQuotations() {
         for (int i = 0; i < THREAD_COUNT; i++) {
-            processorService.submit(new RecordProcessingTask(recordQueue));
+            processorService.submit(processingTask);
         }
 
         processorService.shutdown();

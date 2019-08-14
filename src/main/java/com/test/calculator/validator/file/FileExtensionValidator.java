@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class FileExtensionValidator implements FileValidator {
 
     @Override
-    public boolean validate(String fileName) {
-        return FilenameUtils.getExtension(fileName).endsWith(".csv");
+    public boolean isValid(String path) {
+        return FilenameUtils.getExtension(path).endsWith("csv");
     }
 }
