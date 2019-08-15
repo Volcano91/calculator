@@ -1,8 +1,6 @@
-package com.test.calculator.tasks;
+package com.test.calculator.service;
 
 import com.test.calculator.model.Record;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.LinkedBlockingQueue;

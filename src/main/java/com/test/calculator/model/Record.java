@@ -3,11 +3,15 @@ package com.test.calculator.model;
 import lombok.Builder;
 import lombok.Value;
 
+import java.time.LocalDate;
+
 @Value
 @Builder
 public class Record {
 
-    private String date;
+    private Long number;
+
+    private LocalDate date;
 
     private String isin;
 

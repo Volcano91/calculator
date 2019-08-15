@@ -1,61 +1,59 @@
-package com.test.calculator.tasks;
+package com.test.calculator.service;
 
+import com.test.calculator.exceptions.FileException;
 import com.test.calculator.model.Record;
 import com.test.calculator.transformer.RecordTransformer;
+import com.test.calculator.filter.csv_record.CsvRecordFilterChain;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 @Slf4j
 @Component
-public class CsvFileReadingTask {
-
-    @NotNull
-    private File stocksFile;
+public class CsvFileReadingService {
 
     private static final int PILL_NUMBER = 150;
     private static final Record POISON_PILL = Record.builder().build();
 
     private final RecordQueue recordsQueue;
 
+    private final CsvRecordFilterChain recordFilterChain;
+
     private final RecordTransformer recordTransformer;
 
-    public CsvFileReadingTask(RecordQueue recordsQueue,
-                              RecordTransformer recordTransformer) {
+    public CsvFileReadingService(RecordQueue recordsQueue,
+                                 CsvRecordFilterChain recordFilterChain,
+                                 RecordTransformer recordTransformer) {
         this.recordsQueue = recordsQueue;
+        this.recordFilterChain = recordFilterChain;
         this.recordTransformer = recordTransformer;
     }
 
-    public void readRecords(String fileName) {
+    public void readRecords(File file) throws FileException {
 
         try {
-            CSVParser csvParser = getCsvRecordsFromFile(fileName);
+            CSVParser csvParser = CSVParser.parse(file, Charset.defaultCharset(), CSVFormat.RFC4180 .withDelimiter(';'));
             parseRecords(csvParser);
-
-        } catch (InterruptedException | IOException ex) {
-            log.error("Error while reading the file. Message: " + ex.getMessage());
+        } catch (InterruptedException | IOException e) {
+            log.error("Error while parsing the file. " + e.getMessage());
             Thread.currentThread().interrupt();
         }
-    }
 
-    private CSVParser getCsvRecordsFromFile(String fileName) throws IOException {
-        stocksFile = ResourceUtils.getFile(fileName);
-
-        return CSVParser.parse(stocksFile, Charset.defaultCharset(), CSVFormat.RFC4180
-                .withDelimiter(';'));
     }
 
     private void parseRecords(CSVParser csvParser) throws InterruptedException {
 
         for (CSVRecord csvRecord : csvParser) {
+            if(!recordFilterChain.filter(csvRecord)) {
+                continue;
+            }
+
             Record record = recordTransformer.transform(csvRecord);
             recordsQueue.put(record);
             System.out.println("Record put: " + csvRecord.getRecordNumber());

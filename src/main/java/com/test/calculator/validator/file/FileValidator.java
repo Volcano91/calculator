@@ -1,7 +1,11 @@
 package com.test.calculator.validator.file;
 
+import java.io.File;
+
 public interface FileValidator {
 
-    boolean isValid(String path);
+    File validate(File file);
+
+    void setNext(FileValidator validator);
 
 }

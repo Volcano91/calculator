@@ -1,13 +1,12 @@
 package com.test.calculator.validator.file;
 
 import com.test.calculator.exceptions.FileException;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 
 @Component
-public class FileExtensionValidator implements FileValidator {
+public class FileConsistencyValidator implements FileValidator {
 
     private FileValidator nextValidator;
 
@@ -15,14 +14,15 @@ public class FileExtensionValidator implements FileValidator {
     public File validate(File file) {
         File validatedFile = file;
 
-        if(FilenameUtils.getExtension(file.getName()).endsWith("csv")) {
+        if(validatedFile != null) {
+            validatedFile = validatedFile.exists() && validatedFile != null ? validatedFile : null;
 
             if (nextValidator != null) {
-                validatedFile = nextValidator.validate(validatedFile);
+               validatedFile = nextValidator.validate(validatedFile);
             }
         }
         else {
-            throw new FileException("File has  an extension that differs from csv.");
+            throw new FileException("File doesn't exist or null.");
         }
         return  validatedFile;
     }

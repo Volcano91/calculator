@@ -13,42 +13,41 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import static com.test.calculator.TestModel.RESOURCE_LOCATION;
-import static com.test.calculator.TestModel.WRONG_EXTENSION_RESOURCE;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FileExtensionValidatorTest {
+public class FileConsistencyValidatorTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private FileExtensionValidator validator;
+    private FileConsistencyValidator consistencyValidator;
 
     @Before
     public void setUp() {
-        validator = new FileExtensionValidator();
+        consistencyValidator = new FileConsistencyValidator();
     }
 
     @Test
-    public void should_validate_file_extension() throws FileNotFoundException {
+    public void should_return_true_if_file_exists() throws FileNotFoundException {
         //GIVEN
         File expected = ResourceUtils.getFile(RESOURCE_LOCATION);
 
         //WHEN
-         File actual = validator.validate(expected);
+        File actual = consistencyValidator.validate(expected);
 
         //THEN
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void should_throw_exception_on_wrong_extension() throws FileNotFoundException {
+    public void should_throw_file_exception_on_no_file() {
         //GIVEN
         expectedException.expect(FileException.class);
-        expectedException.expectMessage("File has  an extension that differs from csv.");
-        File file = ResourceUtils.getFile(WRONG_EXTENSION_RESOURCE);
+        expectedException.expectMessage("File doesn't exist or null.");
 
         //WHEN
-        validator.validate(file);
+        consistencyValidator.validate(null);
+
     }
 }

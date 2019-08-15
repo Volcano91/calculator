@@ -4,12 +4,20 @@ import com.test.calculator.model.Record;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class RecordTransformer {
 
+    private String dateFormat = "yyyy-MM-dd";
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+
     public Record transform(CSVRecord csvRecord) {
         return Record.builder()
-                .date(csvRecord.get(0))
+                .number(csvRecord.getRecordNumber())
+                .date(LocalDate.parse(csvRecord.get(0), formatter))
                 .isin(csvRecord.get(1))
                 .currency(csvRecord.get(2))
                 .price(csvRecord.get(3))

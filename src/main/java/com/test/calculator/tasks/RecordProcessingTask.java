@@ -1,6 +1,7 @@
 package com.test.calculator.tasks;
 
 import com.test.calculator.model.Record;
+import com.test.calculator.service.RecordQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
