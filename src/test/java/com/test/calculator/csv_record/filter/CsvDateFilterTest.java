@@ -1,5 +1,6 @@
-package com.test.calculator.filter.csv_record;
+package com.test.calculator.csv_record.filter;
 
+import com.test.calculator.csv_record.filter.CsvDateFilter;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Before;

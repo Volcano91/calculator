@@ -3,7 +3,7 @@ package com.test.calculator.service;
 import com.test.calculator.exceptions.FileException;
 import com.test.calculator.model.Record;
 import com.test.calculator.transformer.RecordTransformer;
-import com.test.calculator.filter.csv_record.CsvRecordFilterChain;
+import com.test.calculator.csv_record.filter.CsvRecordFilterChain;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -38,8 +38,11 @@ public class CsvFileReadingService {
     public void readRecords(File file) throws FileException {
 
         try {
-            CSVParser csvParser = CSVParser.parse(file, Charset.defaultCharset(), CSVFormat.RFC4180 .withDelimiter(';'));
+
+            CSVParser csvParser = CSVParser.parse(file, Charset.defaultCharset(),
+                    CSVFormat.RFC4180 .withDelimiter(';'));
             parseRecords(csvParser);
+
         } catch (InterruptedException | IOException e) {
             log.error("Error while parsing the file. " + e.getMessage());
             Thread.currentThread().interrupt();
@@ -56,7 +59,6 @@ public class CsvFileReadingService {
 
             Record record = recordTransformer.transform(csvRecord);
             recordsQueue.put(record);
-            System.out.println("Record put: " + csvRecord.getRecordNumber());
         }
 
         putPoisonPills();

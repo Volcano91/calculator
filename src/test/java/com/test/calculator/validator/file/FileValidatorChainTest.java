@@ -13,6 +13,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import static com.test.calculator.TestModel.NULL_FILE_PATH;
 import static com.test.calculator.TestModel.RESOURCE_LOCATION;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -53,14 +54,14 @@ public class FileValidatorChainTest {
     }
 
     @Test
-    public void should_throw_exception_on_failed_validation() throws FileNotFoundException {
+    public void should_throw_exception_on_failed_validation() {
         //GIVEN
         doThrow(FileException.class).when(consistencyValidator).validate(null);
-        //TODO find a way how to mock a setting one mock to another
         expectedException.expect(FileException.class);
-
+        
+        //TODO find a way how to mock a setting one mock to another
         //WHEN
-        chain.validate(null);
+        chain.validate(NULL_FILE_PATH);
 
     }
 

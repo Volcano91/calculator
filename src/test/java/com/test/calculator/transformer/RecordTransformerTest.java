@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 import static com.test.calculator.TestModel.RESOURCE_LOCATION;
 import static com.test.calculator.TestModel.getParserForFile;
@@ -30,7 +29,7 @@ public class RecordTransformerTest {
         //GIVEN
         Record expected = Record.builder()
                                 .number(1L)
-                                .date(LocalDate.parse("2019-07-29"))
+                                .date("2019-07-29")
                                 .isin("PLNFI0600010")
                                 .currency("PLN")
                                 .price("0.2")

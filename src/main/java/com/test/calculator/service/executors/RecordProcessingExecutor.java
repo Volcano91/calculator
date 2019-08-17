@@ -1,7 +1,7 @@
 package com.test.calculator.service.executors;
 
-import com.test.calculator.tasks.RecordProcessingTask;
 import com.test.calculator.service.RecordQueue;
+import com.test.calculator.tasks.RecordProcessingTask;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutorService;

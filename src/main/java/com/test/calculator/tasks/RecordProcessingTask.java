@@ -1,5 +1,6 @@
 package com.test.calculator.tasks;
 
+import com.test.calculator.calculator.ConditionOperationManager;
 import com.test.calculator.model.Record;
 import com.test.calculator.service.RecordQueue;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class RecordProcessingTask implements Runnable {
 
     private final RecordQueue recordsQueue;
+    private final ConditionOperationManager operationManager;
 
-    public RecordProcessingTask(RecordQueue recordsQueue) {
+
+    public RecordProcessingTask(RecordQueue recordsQueue, ConditionOperationManager operationManager) {
         this.recordsQueue = recordsQueue;
+        this.operationManager = operationManager;
     }
 
     @Override
@@ -23,8 +27,8 @@ public class RecordProcessingTask implements Runnable {
                 if (record.equals(Record.builder().build())) {
                     return;
                 }
-                //TODO implement an actual processing
-                System.out.println("Take number : " + record);
+
+                operationManager.performCalculations(record);
             }
         } catch (InterruptedException e) {
             log.error("Error while processing a record. Message: " + e.getMessage());

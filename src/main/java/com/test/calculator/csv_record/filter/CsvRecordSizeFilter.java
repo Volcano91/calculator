@@ -1,16 +1,18 @@
-package com.test.calculator.filter.csv_record;
+package com.test.calculator.csv_record.filter;
 
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CsvCurrencyFilter implements CsvFilter {
+public class CsvRecordSizeFilter implements CsvFilter {
 
+    private static final int NEEDED_SIZE = 6;
     private CsvFilter nextFilter;
 
     @Override
     public boolean filter(CSVRecord record) {
-        if(!record.get(2).equals("PLN")) {
+
+        if(record.size() != NEEDED_SIZE) {
             return false;
         }
 

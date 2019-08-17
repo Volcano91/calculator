@@ -19,6 +19,7 @@ public final class TestModel {
     public static final String REAL_FILE_PATH = "classpath:csv/Stocks.csv";
     public static final String EXCEPTION_MESSAGE = "File has  an extension that differs from csv.";
     public static final String WRONG_FILE_PATH = "classpath:test.txt";
+    public static final String NULL_FILE_PATH = " ";
 
 
     private TestModel() { }
@@ -28,5 +29,6 @@ public final class TestModel {
 
         return CSVParser.parse(testFile, Charset.defaultCharset(), CSVFormat.RFC4180.withDelimiter(';'));
     }
+
 
 }

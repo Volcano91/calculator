@@ -7,11 +7,14 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 import static com.test.calculator.TestModel.*;
+import static java.util.Arrays.asList;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class QuotationServiceIT {
 
@@ -23,6 +26,8 @@ public class QuotationServiceIT {
 
     @Test
     public void should_execute_read_and_processing_tasks() {
+        //GIVEN
+        List<String> conditions = asList("2019-07", "PLMCINT00013");
         //WHEN
         service.doCalculations(REAL_FILE_PATH);
     }

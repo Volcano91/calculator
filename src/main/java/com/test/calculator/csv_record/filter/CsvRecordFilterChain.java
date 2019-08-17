@@ -1,4 +1,4 @@
-package com.test.calculator.filter.csv_record;
+package com.test.calculator.csv_record.filter;
 
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
