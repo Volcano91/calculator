@@ -9,7 +9,6 @@ public class RecordTransformer {
 
     public Record transform(CSVRecord csvRecord) {
         return Record.builder()
-                .number(csvRecord.getRecordNumber())
                 .date(csvRecord.get(0))
                 .isin(csvRecord.get(1))
                 .currency(csvRecord.get(2))

@@ -9,9 +9,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import static com.test.calculator.ConditionOperationTestModel.conditionOperations;
 import static com.test.calculator.ConditionTestModel.*;
 import static com.test.calculator.OperationTestModel.sumOperation;
+import static com.test.calculator.TestModel.resultMap;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,6 +47,8 @@ public class ConditionOperationManagerTest {
                 .volume("0")
                 .turnOver("33.22")
                 .build();
+        String columnName = "TurnOver";
+        ConcurrentHashMap expectedMap = resultMap();
 
         when(provider.getConditionOperations(record)).thenReturn(conditionOperations(record));
         when(validator.validate(firstConditionChain(), record)).thenReturn(false);
@@ -52,13 +57,10 @@ public class ConditionOperationManagerTest {
         when(validator.validate(fourthConditionChain(), record)).thenReturn(false);
         when(validator.validate(fifthConditionChain(), record)).thenReturn(true);
 
-        doNothing().when(executor).execute(sumOperation(record.getTurnOver()));
-
         //WHEN
-        manager.performCalculations(record);
+        ConcurrentHashMap actual = manager.performCalculations(expectedMap, record);
 
         //THEN
-        verify(executor, times(1)).execute(sumOperation(record.getTurnOver()));
-
+        verify(executor, times(1)).execute(expectedMap, sumOperation(columnName, record.getTurnOver()));
     }
 }

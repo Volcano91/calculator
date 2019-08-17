@@ -13,18 +13,16 @@ public class FileExtensionValidator implements FileValidator {
 
     @Override
     public File validate(File file) {
-        File validatedFile = file;
-
         if(FilenameUtils.getExtension(file.getName()).endsWith("csv")) {
 
             if (nextValidator != null) {
-                validatedFile = nextValidator.validate(validatedFile);
+                file = nextValidator.validate(file);
             }
         }
         else {
             throw new FileException("File has  an extension that differs from csv.");
         }
-        return  validatedFile;
+        return file;
     }
 
     @Override

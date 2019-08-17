@@ -2,20 +2,29 @@ package com.test.calculator.calculator.model.operations;
 
 import lombok.Builder;
 import lombok.Value;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.math.BigDecimal;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class MaxOperation implements Operation {
 
     private String column;
 
-    @Override
-    public void execute() {
-//        if (rowColumn.compareTo(result.get()) == 1) {
-//            result.getAndSet(rowColumn);
-//        }
+    private String operationKey;
 
-        System.out.println("Max operation for " + column);
+    @Override
+    public void execute(ConcurrentHashMap<String, AtomicReference<BigDecimal>> resultMap) {
+        AtomicReference<BigDecimal> result = resultMap.get(operationKey);
+        BigDecimal columnDecimal = NumberUtils.createBigDecimal(column);
+
+        if (columnDecimal.compareTo(result.get()) == 1) {
+            result.getAndSet(columnDecimal);
+        }
+
     }
 
 }

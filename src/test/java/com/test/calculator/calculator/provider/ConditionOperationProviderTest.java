@@ -50,10 +50,16 @@ public class ConditionOperationProviderTest {
         when(chainProvider.getFourthConditionChain()).thenReturn(fourthConditionChain());
         when(chainProvider.getFifthConditionChain()).thenReturn(fifthConditionChain());
 
-        when(operationProvider.getMaxOperation(record.getTurnOver())).thenReturn(maxOperation(record.getTurnOver()));
-        when(operationProvider.getMaxOperation(record.getPrice())).thenReturn(maxOperation(record.getPrice()));
-        when(operationProvider.getMeanOperation(record.getPrice())).thenReturn(meanOperation(record.getPrice()));
-        when(operationProvider.getSumOperation(record.getTurnOver())).thenReturn(sumOperation(record.getTurnOver()));
+        when(operationProvider.getMaxOperation("TurnOver", record.getTurnOver()))
+                .thenReturn(maxOperation("TurnOver", record.getTurnOver()));
+        when(operationProvider.getMaxOperation("Price", record.getPrice()))
+                .thenReturn(maxOperation("Price", record.getPrice()));
+        when(operationProvider.getMeanOperation("PricePLACTIN00018", record.getPrice()))
+                .thenReturn(meanOperation("Price", record.getPrice()));
+        when(operationProvider.getMeanOperation("PricePLMCINT00013", record.getPrice()))
+                .thenReturn(meanOperation("Price", record.getPrice()));
+        when(operationProvider.getSumOperation("TurnOver", record.getTurnOver()))
+                .thenReturn(sumOperation("TurnOver", record.getTurnOver()));
 
         //WHEN
         List<ConditionOperation> actual = conditionOperationProvider.getConditionOperations(record);

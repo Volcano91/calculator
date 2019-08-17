@@ -17,7 +17,8 @@ import static com.test.calculator.TestModel.NULL_FILE_PATH;
 import static com.test.calculator.TestModel.RESOURCE_LOCATION;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FileValidatorChainTest {
@@ -28,13 +29,14 @@ public class FileValidatorChainTest {
     @Mock
     private FileExtensionValidator extensionValidator;
 
-    @Mock
     private FileConsistencyValidator consistencyValidator;
 
     private FileValidatorChain chain;
 
     @Before
     public void setUp() {
+        consistencyValidator = new FileConsistencyValidator();
+        consistencyValidator.setNext(extensionValidator);
         chain = new FileValidatorChain(asList(consistencyValidator, extensionValidator));
     }
 
@@ -43,7 +45,6 @@ public class FileValidatorChainTest {
         //GIVEN
         File expected = ResourceUtils.getFile(RESOURCE_LOCATION);
 
-        when(consistencyValidator.validate(expected)).thenReturn(expected);
         when(extensionValidator.validate(expected)).thenReturn(expected);
 
         //WHEN
@@ -56,10 +57,10 @@ public class FileValidatorChainTest {
     @Test
     public void should_throw_exception_on_failed_validation() {
         //GIVEN
-        doThrow(FileException.class).when(consistencyValidator).validate(null);
+
         expectedException.expect(FileException.class);
-        
-        //TODO find a way how to mock a setting one mock to another
+        expectedException.expectMessage("File doesn't exist or null.");
+
         //WHEN
         chain.validate(NULL_FILE_PATH);
 
@@ -70,14 +71,11 @@ public class FileValidatorChainTest {
         //GIVEN
         File file = ResourceUtils.getFile(RESOURCE_LOCATION);
 
-        when(consistencyValidator.validate(file)).thenReturn(file);
-        //TODO find a way how to mock a setting one mock to another
         doThrow(FileException.class).when(extensionValidator).validate(file);
 
         expectedException.expect(FileException.class);
 
         //WHEN
         chain.validate(RESOURCE_LOCATION);
-
     }
 }

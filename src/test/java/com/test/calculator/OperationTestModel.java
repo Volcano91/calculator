@@ -2,27 +2,33 @@ package com.test.calculator;
 
 import com.test.calculator.calculator.model.operations.MaxOperation;
 import com.test.calculator.calculator.model.operations.MeanOperation;
+import com.test.calculator.calculator.model.operations.Operation;
 import com.test.calculator.calculator.model.operations.SumOperation;
+import org.apache.commons.lang3.StringUtils;
 
 public final class OperationTestModel {
 
     private OperationTestModel() { }
 
-    public static MaxOperation maxOperation(String column) {
+    public static Operation maxOperation(String columnName, String columnValue) {
         return MaxOperation.builder()
-                    .column(column)
-                    .build();
+                .operationKey(StringUtils.join("max", columnName))
+                .column(columnValue)
+                .build();
     }
 
-    public static MeanOperation meanOperation(String column) {
+    public static Operation meanOperation(String columnName, String column) {
         return MeanOperation.builder()
-                    .column(column)
-                    .build();
+                .operationKey(StringUtils.join("mean", columnName))
+                .counterKey(StringUtils.join("meanCounter", columnName))
+                .column(column)
+                .build();
     }
 
-    public static SumOperation sumOperation(String column) {
+    public static Operation sumOperation(String columnName, String column) {
         return SumOperation.builder()
-                    .column(column)
-                    .build();
+                .operationKey(StringUtils.join("sum", columnName))
+                .column(column)
+                .build();
     }
 }

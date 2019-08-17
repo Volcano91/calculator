@@ -28,7 +28,6 @@ public class RecordTransformerTest {
     public void should_transform_csv_record_to_record() throws IOException {
         //GIVEN
         Record expected = Record.builder()
-                                .number(1L)
                                 .date("2019-07-29")
                                 .isin("PLNFI0600010")
                                 .currency("PLN")

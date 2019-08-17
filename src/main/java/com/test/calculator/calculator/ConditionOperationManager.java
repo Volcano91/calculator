@@ -8,7 +8,10 @@ import com.test.calculator.calculator.validator.ConditionValidator;
 import com.test.calculator.model.Record;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Service
@@ -28,7 +31,7 @@ public class ConditionOperationManager {
         this.operationExecutor = operationExecutor;
     }
 
-    public void performCalculations(Record record) {
+    public ConcurrentHashMap<String, AtomicReference<BigDecimal>> performCalculations(ConcurrentHashMap resultMap, Record record) {
         List<ConditionOperation> conditionOperations = conditionOperationProvider.getConditionOperations(record);
 
         for(ConditionOperation conditionOperation : conditionOperations) {
@@ -36,8 +39,10 @@ public class ConditionOperationManager {
             Operation operation = conditionOperation.getOperation();
 
             if(conditionValidator.validate(conditionChains, record)) {
-                operationExecutor.execute(operation);
+                operationExecutor.execute(resultMap, operation);
             }
         }
+
+        return resultMap;
     }
 }

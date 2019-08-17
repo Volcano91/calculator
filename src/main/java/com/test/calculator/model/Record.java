@@ -7,8 +7,6 @@ import lombok.Value;
 @Builder
 public class Record {
 
-    private Long number;
-
     private String date;
 
     private String isin;

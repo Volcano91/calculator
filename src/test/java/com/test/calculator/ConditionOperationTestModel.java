@@ -24,38 +24,38 @@ public final class ConditionOperationTestModel {
         );
     }
 
-    private static ConditionOperation firstConditionOperation(Record record) {
+    public static ConditionOperation firstConditionOperation(Record record) {
         return ConditionOperation.builder()
                     .conditionChains(firstConditionChain())
-                    .operation(maxOperation(record.getTurnOver()))
+                    .operation(maxOperation("TurnOver",record.getTurnOver()))
                     .build();
     }
 
     private static ConditionOperation secondConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(secondConditionChain())
-                .operation(meanOperation(record.getPrice()))
+                .operation(meanOperation("Price", record.getPrice()))
                 .build();
     }
 
     private static ConditionOperation thirdConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(thirdConditionChain())
-                .operation(meanOperation(record.getPrice()))
+                .operation(meanOperation("Price", record.getPrice()))
                 .build();
     }
 
     private static ConditionOperation fourthConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(fourthConditionChain())
-                .operation(maxOperation(record.getPrice()))
+                .operation(maxOperation("Price", record.getPrice()))
                 .build();
     }
 
     private static ConditionOperation fifthConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(fifthConditionChain())
-                .operation(sumOperation(record.getTurnOver()))
+                .operation(sumOperation("TurnOver", record.getTurnOver()))
                 .build();
     }
 }

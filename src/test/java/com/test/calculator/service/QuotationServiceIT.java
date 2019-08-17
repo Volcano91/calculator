@@ -1,5 +1,6 @@
 package com.test.calculator.service;
 
+import com.test.calculator.calculator.model.CalculationResult;
 import com.test.calculator.exceptions.FileException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
-
 import static com.test.calculator.TestModel.*;
-import static java.util.Arrays.asList;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,10 +25,12 @@ public class QuotationServiceIT {
 
     @Test
     public void should_execute_read_and_processing_tasks() {
-        //GIVEN
-        List<String> conditions = asList("2019-07", "PLMCINT00013");
+
         //WHEN
-        service.doCalculations(REAL_FILE_PATH);
+        CalculationResult calculationResult = service.doCalculations(REAL_FILE_PATH);
+        System.out.println(calculationResult);
+        //THEN
+        assertThat(calculationResult).isNotNull();
     }
 
     @Test

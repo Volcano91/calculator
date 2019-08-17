@@ -12,19 +12,20 @@ public class FileConsistencyValidator implements FileValidator {
 
     @Override
     public File validate(File file) {
-        File validatedFile = file;
-
-        if(validatedFile != null) {
-            validatedFile = validatedFile.exists() && validatedFile != null ? validatedFile : null;
-
-            if (nextValidator != null) {
-               validatedFile = nextValidator.validate(validatedFile);
+        try {
+            if (file.exists() && file != null) {
+                if (nextValidator != null) {
+                    file = nextValidator.validate(file);
+                }
+            } else {
+                throw new FileException("File doesn't exist or null.");
             }
         }
-        else {
+        catch (NullPointerException ex) {
             throw new FileException("File doesn't exist or null.");
         }
-        return  validatedFile;
+
+        return  file;
     }
 
     @Override
