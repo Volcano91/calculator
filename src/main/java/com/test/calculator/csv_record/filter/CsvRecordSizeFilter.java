@@ -7,16 +7,17 @@ import org.springframework.stereotype.Component;
 public class CsvRecordSizeFilter implements CsvFilter {
 
     private static final int NEEDED_SIZE = 6;
+
     private CsvFilter nextFilter;
 
     @Override
     public boolean filter(CSVRecord record) {
 
-        if(record.size() != NEEDED_SIZE) {
-            return false;
-        }
-
-        return nextFilter != null ? nextFilter.filter(record) : true;
+        return record.size() != NEEDED_SIZE
+                ? false
+                : nextFilter != null
+                ? nextFilter.filter(record)
+                : true;
     }
 
     @Override

@@ -8,8 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static java.util.Arrays.asList;
 
 public final class TestModel {
 
@@ -23,9 +26,11 @@ public final class TestModel {
     public static final String EXCEPTION_MESSAGE = "File has  an extension that differs from csv.";
     public static final String WRONG_FILE_PATH = "classpath:test.txt";
     public static final String NULL_FILE_PATH = "";
+    public static final String SUM_TURN_OVER = "sumTurnOver";
 
 
-    private TestModel() { }
+    private TestModel() {
+    }
 
     public static CSVParser getParserForFile(String filePath) throws IOException {
         File testFile = ResourceUtils.getFile(filePath);
@@ -39,26 +44,16 @@ public final class TestModel {
         resultMap.put("maxTurnOver", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("meanPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("meanPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
+        resultMap.put("meanPricePLMCINT00013Counter", new AtomicReference<>(BigDecimal.ZERO));
+        resultMap.put("meanPricePLACTIN00018Counter", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("maxPrice", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("sumTurnOver", new AtomicReference<>(BigDecimal.ZERO));
 
         return resultMap;
     }
 
-    public static ConcurrentHashMap<String, AtomicReference<BigDecimal>> updatedMap() {
-        ConcurrentHashMap<String, AtomicReference<BigDecimal>> resultMap = new ConcurrentHashMap<>();
-
-        resultMap.put("maxTurnOver", new AtomicReference<>(BigDecimal.valueOf(33.22)));
-        resultMap.put("meanPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("maxPrice", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("sumTurnOver", new AtomicReference<>(BigDecimal.ZERO));
-
-        return resultMap;
+    public static List<String> expectedResult() {
+        return asList("maxTurnOver : 0", "meanPricePLMCINT00013 : 0",
+                "meanPricePLACTIN00018 : 0", "maxPrice : 0", "sumTurnOver : 0");
     }
-
 }

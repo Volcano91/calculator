@@ -61,6 +61,7 @@ public class ConditionOperationManagerTest {
         ConcurrentHashMap actual = manager.performCalculations(expectedMap, record);
 
         //THEN
-        verify(executor, times(1)).execute(expectedMap, sumOperation(columnName, record.getTurnOver()));
+        verify(executor, times(1))
+                .execute(expectedMap, sumOperation(columnName, record.getTurnOver()));
     }
 }

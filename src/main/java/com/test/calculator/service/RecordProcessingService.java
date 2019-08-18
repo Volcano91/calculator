@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Component
 public class RecordProcessingService {
 
+    private static final Record POISON_PILL = Record.builder().build();
+
     private final RecordQueue recordsQueue;
     private final ConditionOperationManager operationManager;
 
@@ -21,21 +23,17 @@ public class RecordProcessingService {
         this.operationManager = operationManager;
     }
 
+    public ConcurrentHashMap<String, AtomicReference<BigDecimal>> processRecords(
+                        ConcurrentHashMap<String, AtomicReference<BigDecimal>> resultMap) throws InterruptedException {
+        while (true) {
+            Record record = recordsQueue.take();
 
-    public ConcurrentHashMap<String, AtomicReference<BigDecimal>>
-                                processRecords(ConcurrentHashMap<String, AtomicReference<BigDecimal>> resultMap) {
-        try {
-            while(true) {
-                Record record = recordsQueue.take();
-                if (record.equals(Record.builder().build())) {
-                    break;
-                }
-
-                resultMap = operationManager.performCalculations(resultMap, record);
+            if (record.equals(POISON_PILL)) {
+                break;
             }
-        } catch (InterruptedException e) {
-            log.error("Error while processing a record. Message: " + e.getMessage());
-            Thread.currentThread().interrupt();
+
+            resultMap = operationManager.performCalculations(resultMap, record);
+
         }
 
         return resultMap;

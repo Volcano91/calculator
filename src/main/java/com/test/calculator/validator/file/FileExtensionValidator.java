@@ -9,18 +9,19 @@ import java.io.File;
 @Component
 public class FileExtensionValidator implements FileValidator {
 
+    private static final String EXCEPTION_MESSAGE = "File has  an extension that differs from csv.";
+
     private FileValidator nextValidator;
 
     @Override
     public File validate(File file) {
         if(FilenameUtils.getExtension(file.getName()).endsWith("csv")) {
-
             if (nextValidator != null) {
                 file = nextValidator.validate(file);
             }
         }
         else {
-            throw new FileException("File has  an extension that differs from csv.");
+            throw new FileException(EXCEPTION_MESSAGE);
         }
         return file;
     }

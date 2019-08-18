@@ -31,18 +31,22 @@ public class ConditionOperationManager {
         this.operationExecutor = operationExecutor;
     }
 
-    public ConcurrentHashMap<String, AtomicReference<BigDecimal>> performCalculations(ConcurrentHashMap resultMap, Record record) {
+    public ConcurrentHashMap<String, AtomicReference<BigDecimal>> performCalculations(ConcurrentHashMap resultMap,
+                                                                                      Record record) {
         List<ConditionOperation> conditionOperations = conditionOperationProvider.getConditionOperations(record);
 
-        for(ConditionOperation conditionOperation : conditionOperations) {
-            List<ConditionChain> conditionChains = conditionOperation.getConditionChains();
-            Operation operation = conditionOperation.getOperation();
-
-            if(conditionValidator.validate(conditionChains, record)) {
-                operationExecutor.execute(resultMap, operation);
-            }
-        }
+        conditionOperations.stream()
+                .forEach(conditionOperation -> doCalculations(conditionOperation, resultMap, record));
 
         return resultMap;
+    }
+
+    private void doCalculations(ConditionOperation conditionOperation, ConcurrentHashMap resultMap, Record record) {
+        List<ConditionChain> conditionChains = conditionOperation.getConditionChains();
+        Operation operation = conditionOperation.getOperation();
+
+        if(conditionValidator.validate(conditionChains, record)) {
+            operationExecutor.execute(resultMap, operation);
+        }
     }
 }

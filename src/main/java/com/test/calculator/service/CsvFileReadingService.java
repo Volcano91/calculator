@@ -18,8 +18,9 @@ import java.nio.charset.Charset;
 @Component
 public class CsvFileReadingService {
 
-    private static final int PILL_NUMBER = 150;
+    private static final int PILL_NUMBER = 200;
     private static final Record POISON_PILL = Record.builder().build();
+    private static final String ERROR_MESSAGE = "Error while parsing the file. ";
 
     private final RecordQueue recordsQueue;
 
@@ -44,7 +45,7 @@ public class CsvFileReadingService {
             parseRecords(csvParser);
 
         } catch (InterruptedException | IOException e) {
-            log.error("Error while parsing the file. " + e.getMessage());
+            log.error(ERROR_MESSAGE + e.getMessage());
             Thread.currentThread().interrupt();
         }
 

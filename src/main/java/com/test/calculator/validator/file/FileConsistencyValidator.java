@@ -8,6 +8,8 @@ import java.io.File;
 @Component
 public class FileConsistencyValidator implements FileValidator {
 
+    private static final String EXCEPTION_MESSAGE = "File doesn't exist or null.";
+
     private FileValidator nextValidator;
 
     @Override
@@ -15,17 +17,16 @@ public class FileConsistencyValidator implements FileValidator {
         try {
             if (file.exists() && file != null) {
                 if (nextValidator != null) {
-                    file = nextValidator.validate(file);
+                   file = nextValidator.validate(file);
                 }
             } else {
-                throw new FileException("File doesn't exist or null.");
+                throw new FileException(EXCEPTION_MESSAGE);
             }
         }
         catch (NullPointerException ex) {
-            throw new FileException("File doesn't exist or null.");
+            throw new FileException(EXCEPTION_MESSAGE);
         }
-
-        return  file;
+        return file;
     }
 
     @Override

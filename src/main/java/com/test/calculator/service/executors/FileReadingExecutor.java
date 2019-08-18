@@ -14,9 +14,13 @@ import java.util.concurrent.Executors;
 public class FileReadingExecutor {
 
     private final ExecutorService readerService = Executors.newSingleThreadExecutor();
+
     private final RecordQueue recordQueue;
+
     private final RecordTransformer recordTransformer;
+
     private final FileValidatorChain validatorChain;
+
     private CsvFileReadingService csvFileReadingService;
 
     public FileReadingExecutor(RecordQueue recordQueue, RecordTransformer recordTransformer,

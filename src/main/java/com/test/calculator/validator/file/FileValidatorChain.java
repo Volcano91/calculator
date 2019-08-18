@@ -11,6 +11,8 @@ import java.util.List;
 @Service
 public class FileValidatorChain {
 
+    private static final String EXCEPTION_MESSAGE = "File didn't pass a validation : ";
+
     private List<FileValidator> validators;
 
     public FileValidatorChain(List<FileValidator> fileValidators) {
@@ -29,7 +31,7 @@ public class FileValidatorChain {
             return validators.get(0).validate(file);
 
         } catch (FileNotFoundException | FileException ex) {
-            throw new FileException("File didn't pass a validation : " + ex.getMessage());
+            throw new FileException(EXCEPTION_MESSAGE + ex.getMessage());
         }
 
     }

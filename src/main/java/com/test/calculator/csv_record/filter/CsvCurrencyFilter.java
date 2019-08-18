@@ -6,15 +6,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class CsvCurrencyFilter implements CsvFilter {
 
+    private static final String CURRENCY_TO_FILTER = "PLN";
+    private static final int CURRENCY_INDEX = 2;
+
     private CsvFilter nextFilter;
 
     @Override
     public boolean filter(CSVRecord record) {
-        if(!record.get(2).equals("PLN")) {
-            return false;
-        }
 
-        return nextFilter != null ? nextFilter.filter(record) : true;
+        return record.get(CURRENCY_INDEX).equals(CURRENCY_TO_FILTER)
+                ? nextFilter != null
+                ? nextFilter.filter(record)
+                : true
+                : false;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.test.calculator.service;
 
-import com.test.calculator.calculator.model.CalculationResult;
 import com.test.calculator.calculator.transformer.CalculationResultTransformer;
 import com.test.calculator.service.executors.FileReadingExecutor;
 import com.test.calculator.service.executors.RecordProcessingExecutor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,13 +35,14 @@ public class QuotationService {
         resultMap.put("maxTurnOver", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("meanPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("meanPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLMCINT00013", new AtomicReference<>(BigDecimal.ZERO));
-        resultMap.put("meanCounterPricePLACTIN00018", new AtomicReference<>(BigDecimal.ZERO));
+        resultMap.put("meanPricePLMCINT00013Counter", new AtomicReference<>(BigDecimal.ZERO));
+        resultMap.put("meanPricePLACTIN00018Counter", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("maxPrice", new AtomicReference<>(BigDecimal.ZERO));
         resultMap.put("sumTurnOver", new AtomicReference<>(BigDecimal.ZERO));
+
     }
 
-    public CalculationResult doCalculations(String fileName) {
+    public List<String> doCalculations(String fileName) {
 
         fileReadingExecutor.readQuotationsFile(fileName);
         ConcurrentHashMap results = recordProcessingExecutor.processQuotations(resultMap);

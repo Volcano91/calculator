@@ -12,6 +12,11 @@ import static java.util.Arrays.asList;
 @Component
 public class ConditionOperationProvider {
 
+    private static final String TURN_OVER = "TurnOver";
+    private static final String PRICE = "Price";
+    private static final String ISIN_ONE = "PLACTIN00018";
+    private static final String ISIN_TWO = "PLMCINT00013";
+
     private final ConditionChainProvider conditionChainProvider;
 
     private final OperationProvider operationProvider;
@@ -31,7 +36,7 @@ public class ConditionOperationProvider {
     private ConditionOperation firstConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(conditionChainProvider.getFirstConditionChain())
-                .operation(operationProvider.getMaxOperation("TurnOver",record.getTurnOver()))
+                .operation(operationProvider.getMaxOperation(TURN_OVER,record.getTurnOver()))
                 .build();
     }
 
@@ -39,28 +44,29 @@ public class ConditionOperationProvider {
         return ConditionOperation.builder()
                 .conditionChains(conditionChainProvider.getSecondConditionChain())
                 .operation(operationProvider.getMeanOperation(
-                        StringUtils.join("Price", "PLACTIN00018"), record.getPrice()))
+                        StringUtils.join(PRICE, ISIN_ONE), record.getPrice()))
                 .build();
     }
 
     private ConditionOperation thirdConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(conditionChainProvider.getThirdConditionChain())
-                .operation(operationProvider.getMeanOperation(StringUtils.join("Price", "PLMCINT00013"), record.getPrice()))
+                .operation(operationProvider.getMeanOperation(StringUtils.join(PRICE, ISIN_TWO), record.getPrice()))
                 .build();
     }
 
     private ConditionOperation fourthConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(conditionChainProvider.getFourthConditionChain())
-                .operation(operationProvider.getMaxOperation("Price", record.getPrice()))
+                .operation(operationProvider.getMaxOperation(PRICE, record.getPrice()))
                 .build();
     }
 
     private ConditionOperation fifthConditionOperation(Record record) {
         return ConditionOperation.builder()
                 .conditionChains(conditionChainProvider.getFifthConditionChain())
-                .operation(operationProvider.getSumOperation("TurnOver", record.getTurnOver()))
+                .operation(operationProvider.getSumOperation(TURN_OVER, record.getTurnOver()))
                 .build();
     }
+
 }

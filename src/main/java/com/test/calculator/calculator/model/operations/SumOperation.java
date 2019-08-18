@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class SumOperation implements Operation {
 
     private String column;

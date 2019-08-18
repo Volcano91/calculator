@@ -15,15 +15,13 @@ public class OrConditionChain implements ConditionChain {
 
     @Override
     public boolean validate(Record record) {
-        boolean result = false;
 
         for (Condition condition : conditions) {
             if(condition.validateRecord(record)) {
-                result = true;
-                break;
+              return true;
             }
         }
 
-        return result;
+        return false;
     }
 }

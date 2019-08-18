@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class MeanOperation implements Operation {
 
     private String column;

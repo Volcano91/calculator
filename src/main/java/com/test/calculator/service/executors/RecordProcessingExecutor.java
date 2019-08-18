@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 @Slf4j
 public class RecordProcessingExecutor {
 
-    private static final int THREAD_COUNT = 150;
+    private static final int THREAD_COUNT = 200;
 
     private final ExecutorService processorService = Executors.newFixedThreadPool(THREAD_COUNT);
 
@@ -24,12 +24,9 @@ public class RecordProcessingExecutor {
     }
 
     public ConcurrentHashMap processQuotations(ConcurrentHashMap resultsMap) {
-        Future results = null;
-        ConcurrentHashMap calculationMap = null;
 
-        for (int i = 0; i < THREAD_COUNT; i++) {
-           results =  processorService.submit(() -> processingService.processRecords(resultsMap));
-        }
+        Future results = processorService.submit(() -> processingService.processRecords(resultsMap));
+        ConcurrentHashMap calculationMap = null;
 
         processorService.shutdown();
 
@@ -38,6 +35,7 @@ public class RecordProcessingExecutor {
         }
         catch (InterruptedException | ExecutionException e) {
             log.error("Error while processing a file: " + e.getMessage());
+            Thread.currentThread().interrupt();
         }
 
         return calculationMap;

@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.test.calculator.OperationTestModel.sumOperation;
+import static com.test.calculator.TestModel.SUM_TURN_OVER;
 import static com.test.calculator.TestModel.resultMap;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -44,6 +45,6 @@ public class OperationExecutorTest {
         executor.execute(map, sumOperation(columnName, record.getTurnOver()));
 
         //THEN
-        assertThat(map.get("sumTurnOver").get()).isEqualTo(NumberUtils.createBigDecimal(record.getTurnOver()));
+        assertThat(map.get(SUM_TURN_OVER).get()).isEqualTo(NumberUtils.createBigDecimal(record.getTurnOver()));
     }
 }

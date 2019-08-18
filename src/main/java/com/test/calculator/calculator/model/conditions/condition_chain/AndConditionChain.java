@@ -15,15 +15,13 @@ public class AndConditionChain implements ConditionChain {
 
     @Override
     public boolean validate(Record record) {
-        boolean result = true;
 
         for (Condition condition : conditions) {
             if (!condition.validateRecord(record)) {
-                result = false;
-                break;
+                return false;
             }
         }
 
-        return result;
+        return true;
     }
 }

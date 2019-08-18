@@ -20,7 +20,7 @@ public final class OperationTestModel {
     public static Operation meanOperation(String columnName, String column) {
         return MeanOperation.builder()
                 .operationKey(StringUtils.join("mean", columnName))
-                .counterKey(StringUtils.join("meanCounter", columnName))
+                .counterKey(StringUtils.join("mean", columnName, "Counter"))
                 .column(column)
                 .build();
     }

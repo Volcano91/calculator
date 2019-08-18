@@ -9,8 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 public class MaxOperation implements Operation {
+
+    private static final int ONE = 1;
 
     private String column;
 
@@ -21,7 +23,7 @@ public class MaxOperation implements Operation {
         AtomicReference<BigDecimal> result = resultMap.get(operationKey);
         BigDecimal columnDecimal = NumberUtils.createBigDecimal(column);
 
-        if (columnDecimal.compareTo(result.get()) == 1) {
+        if (columnDecimal.compareTo(result.get()) == ONE) {
             result.getAndSet(columnDecimal);
         }
 

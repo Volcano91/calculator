@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class CsvNumericFilter implements CsvFilter {
 
     private static final int MINUS_ONE = -1;
+    private static final int NUMERIC_VALUES_STARTING_INDEX = 3;
 
     private CsvFilter nextFilter;
 
@@ -21,20 +22,17 @@ public class CsvNumericFilter implements CsvFilter {
     @Override
     public boolean filter(CSVRecord csvRecord) {
 
-        for (int i = 3; i < csvRecord.size(); i++) {
+        for (int i = NUMERIC_VALUES_STARTING_INDEX; i < csvRecord.size(); i++) {
             String value = csvRecord.get(i);
 
-            if(NumberUtils.isNumber(value)) {
-                if(isValueNegative(value)) {
-                    return false;
-                };
-            }
-            else {
+            if(!NumberUtils.isNumber(value) || isValueNegative(value)) {
                 return false;
             }
         }
 
-        return nextFilter != null ? nextFilter.filter(csvRecord) : true;
+        return nextFilter != null
+                ? nextFilter.filter(csvRecord)
+                : true;
     }
 
     private boolean isValueNegative(String value) {
@@ -42,4 +40,5 @@ public class CsvNumericFilter implements CsvFilter {
 
         return numericValue.compareTo(BigDecimal.ZERO) == MINUS_ONE;
     }
+
 }

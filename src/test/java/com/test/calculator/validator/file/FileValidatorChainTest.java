@@ -57,7 +57,6 @@ public class FileValidatorChainTest {
     @Test
     public void should_throw_exception_on_failed_validation() {
         //GIVEN
-
         expectedException.expect(FileException.class);
         expectedException.expectMessage("File doesn't exist or null.");
 

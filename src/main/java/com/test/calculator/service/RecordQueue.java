@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class RecordQueue {
 
-    private static final int THREAD_COUNT = 150;
+    private static final int THREAD_COUNT = 200;
 
     private static final LinkedBlockingQueue<Record> RECORDS_QUEUE = new LinkedBlockingQueue<>(THREAD_COUNT);
 
